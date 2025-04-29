@@ -1,0 +1,483 @@
+{
+    "name": "my blip agent",
+    "nodes": [
+      {
+        "parameters": {},
+        "id": "3f70f972-52d2-44eb-bb80-28a7a2d9152d",
+        "name": "When clicking ‘Test workflow’",
+        "type": "n8n-nodes-base.manualTrigger",
+        "position": [
+          240,
+          220
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "pineconeIndex": {
+            "__rl": true,
+            "value": "showshulvdb2",
+            "mode": "list",
+            "cachedResultName": "showshulvdb2"
+          },
+          "options": {}
+        },
+        "id": "2c0d3a0a-6a0e-4dad-9f14-04387752b13d",
+        "name": "Pinecone Vector Store",
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+        "position": [
+          980,
+          220
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "pineconeApi": {
+            "id": "G0Gz3Xi7zHleFb9G",
+            "name": "PineconeApi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "c6c6e62e-27ef-4e32-8fc8-0928a1ca551a",
+        "name": "Default Data Loader",
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "position": [
+          1120,
+          400
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "484fc0d3-86c7-4ca3-b74f-d7423e52ea24",
+        "name": "Recursive Character Text Splitter",
+        "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+        "position": [
+          1200,
+          580
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "85539382-f42c-4f7f-9a09-627c9af3833b",
+        "name": "Generate Embeddings",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          1520,
+          920
+        ],
+        "typeVersion": 1.2,
+        "credentials": {
+          "openAiApi": {
+            "id": "tExQNXU7fFiYWHio",
+            "name": "OpenAi account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "d448b7f6-cec6-4cb5-bfd0-b80fbd71be08",
+        "name": "When chat message received",
+        "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+        "position": [
+          220,
+          960
+        ],
+        "webhookId": "089e38ab-4eee-4c34-aa5d-54cf4a8f53b7",
+        "typeVersion": 1.1
+      },
+      {
+        "parameters": {
+          "options": {
+            "systemMessage": "You are a helpful assistant providing information about the GitHub API and how to use it based on the OpenAPI V3 specifications."
+          }
+        },
+        "id": "740937d9-cbed-46a8-87e2-eac9614e9111",
+        "name": "AI Agent",
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "position": [
+          560,
+          960
+        ],
+        "typeVersion": 1.7
+      },
+      {
+        "parameters": {},
+        "id": "f93d36bb-1710-4e77-ba77-6cc50311cd06",
+        "name": "Window Buffer Memory",
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "position": [
+          660,
+          1220
+        ],
+        "typeVersion": 1.3
+      },
+      {
+        "parameters": {
+          "name": "GitHub_OpenAPI_Specification",
+          "description": "Use this tool to get information about the GitHub   API. This database contains OpenAPI v3 specifications."
+        },
+        "id": "6a7669a8-f9a7-417e-9af8-338b14df1338",
+        "name": "Vector Store Tool",
+        "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+        "position": [
+          820,
+          1180
+        ],
+        "typeVersion": 1
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "id": "52d89b97-7f31-4c68-a882-116e218197f5",
+        "name": "Generate User Query Embedding",
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "position": [
+          520,
+          1620
+        ],
+        "typeVersion": 1.2,
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "pineconeIndex": {
+            "__rl": true,
+            "value": "showshulvdb2",
+            "mode": "list",
+            "cachedResultName": "showshulvdb2"
+          },
+          "options": {}
+        },
+        "id": "1bfce5bd-c32c-41d2-ac03-b84b9681a79c",
+        "name": "Pinecone Vector Store (Querying)",
+        "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+        "position": [
+          680,
+          1420
+        ],
+        "typeVersion": 1,
+        "credentials": {
+          "pineconeApi": {
+            "id": "G0Gz3Xi7zHleFb9G",
+            "name": "PineconeApi account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          440,
+          1200
+        ],
+        "id": "9d7b3945-f983-41a8-b539-27ed687c338e",
+        "name": "Groq Chat Model",
+        "credentials": {
+          "groqApi": {
+            "id": "ubzStsQzsZVR1Cuw",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "content": "## Adding data to pinecone\n",
+          "height": 80,
+          "width": 560
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          340,
+          60
+        ],
+        "id": "64372398-1bc8-481f-84eb-9d7dfc67e63d",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "content": "## Test prompt with pinecone",
+          "height": 80,
+          "width": 280
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "typeVersion": 1,
+        "position": [
+          360,
+          840
+        ],
+        "id": "5faabcdc-dccf-4fc6-8587-e011ecf7b801",
+        "name": "Sticky Note1"
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+        "typeVersion": 1,
+        "position": [
+          1120,
+          1400
+        ],
+        "id": "0a7f09a2-a212-4542-992f-10d6e7a9fcac",
+        "name": "Groq Chat Model1",
+        "credentials": {
+          "groqApi": {
+            "id": "ubzStsQzsZVR1Cuw",
+            "name": "Groq account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "executeQuery",
+          "query": "SELECT course_id, course_title, course_description, instructor_name, price, thumbnail_url, video_url, video_title, video_description, video_tags, video_duration_in_seconds, created_at, updated_at\nFROM showshalagent.online_video_courses;",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.mySql",
+        "typeVersion": 2.4,
+        "position": [
+          580,
+          240
+        ],
+        "id": "6ce24485-33a8-4510-b744-2e2b00ca9518",
+        "name": "MySQL",
+        "credentials": {
+          "mySql": {
+            "id": "yPOgG4OlkjipxkNa",
+            "name": "MySQL account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+        "typeVersion": 1.2,
+        "position": [
+          1860,
+          420
+        ],
+        "id": "8d0e9dac-9fc6-4ba9-8ed2-405cc88d3ad9",
+        "name": "Embeddings OpenAI",
+        "credentials": {
+          "openAiApi": {
+            "id": "tExQNXU7fFiYWHio",
+            "name": "OpenAi account"
+          }
+        },
+        "disabled": true
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          980,
+          520
+        ],
+        "id": "4ae205dd-7d6c-48bb-9a7a-5563aa49389c",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "YhxEUZGhjIEnIyqq",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/text-embedding-004"
+        },
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          720,
+          1600
+        ],
+        "id": "55c958c0-e5e6-4218-a4eb-c507cf6c54a3",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "YhxEUZGhjIEnIyqq",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      }
+    ],
+    "pinData": {},
+    "connections": {
+      "When clicking ‘Test workflow’": {
+        "main": [
+          [
+            {
+              "node": "MySQL",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Pinecone Vector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Recursive Character Text Splitter": {
+        "ai_textSplitter": [
+          [
+            {
+              "node": "Default Data Loader",
+              "type": "ai_textSplitter",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate Embeddings": {
+        "ai_embedding": [
+          []
+        ]
+      },
+      "When chat message received": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Window Buffer Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Vector Store Tool": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Generate User Query Embedding": {
+        "ai_embedding": [
+          []
+        ]
+      },
+      "Pinecone Vector Store (Querying)": {
+        "ai_vectorStore": [
+          [
+            {
+              "node": "Vector Store Tool",
+              "type": "ai_vectorStore",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Groq Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "Vector Store Tool",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "MySQL": {
+        "main": [
+          [
+            {
+              "node": "Pinecone Vector Store",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Pinecone Vector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Pinecone Vector Store (Querying)",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "active": false,
+    "settings": {
+      "executionOrder": "v1"
+    },
+    "versionId": "d08f9b63-ebdf-4dcd-b2e9-e653d7efa3c9",
+    "meta": {
+      "instanceId": "db2a2b8e3de2c2474c3f1e2854013c3b0ba62af769d2cc2c8d9f6b8fea902780"
+    },
+    "id": "t0kJWcLOszrWXcjv",
+    "tags": []
+  }
