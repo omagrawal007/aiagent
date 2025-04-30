@@ -1,80 +1,139 @@
 {
-    "nodes": [
-      {
-        "parameters": {
-          "httpMethod": "POST",
-          "url": "https://ec2.amazonaws.com",
-          "authentication": "aws",
-          "aws": {
-            "service": "ec2",
-            "region": "us-east-1"
-          },
-          "queryParametersUi": {
-            "parameter": [
-              {
-                "name": "Action",
-                "value": "StartInstances"
-              },
-              {
-                "name": "InstanceId.1",
-                "value": "i-xxxxxxxxxxxxxxxxx"
-              },
-              {
-                "name": "Version",
-                "value": "2016-11-15"
-              }
-            ]
-          }
-        },
-        "name": "Start EC2 Instance",
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 1,
-        "position": [500, 300],
-        "credentials": {
-          "aws": {
-            "id": "your-aws-credential-id",
-            "name": "AWS Credential Name"
-          }
+  "name": "EC2 Start/Stop via Webhook",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "ec2-control",
+        "method": "POST",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"action\"]}}",
+              "value2": "start"
+            }
+          ]
         }
       },
-      {
-        "parameters": {
-          "httpMethod": "POST",
-          "url": "https://ec2.amazonaws.com",
-          "authentication": "aws",
-          "aws": {
-            "service": "ec2",
-            "region": "us-east-1"
-          },
-          "queryParametersUi": {
-            "parameter": [
-              {
-                "name": "Action",
-                "value": "StopInstances"
-              },
-              {
-                "name": "InstanceId.1",
-                "value": "i-xxxxxxxxxxxxxxxxx"
-              },
-              {
-                "name": "Version",
-                "value": "2016-11-15"
-              }
-            ]
-          }
+      "name": "If Start",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [300, 200]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "https://ec2.amazonaws.com",
+        "authentication": "aws",
+        "aws": {
+          "service": "ec2",
+          "region": "us-east-1"
         },
-        "name": "Stop EC2 Instance",
-        "type": "n8n-nodes-base.httpRequest",
-        "typeVersion": 1,
-        "position": [500, 500],
-        "credentials": {
-          "aws": {
-            "id": "your-aws-credential-id",
-            "name": "AWS Credential Name"
-          }
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "Action",
+              "value": "StartInstances"
+            },
+            {
+              "name": "InstanceId.1",
+              "value": "i-xxxxxxxxxxxxxxxxx"
+            },
+            {
+              "name": "Version",
+              "value": "2016-11-15"
+            }
+          ]
+        }
+      },
+      "name": "Start EC2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [500, 100],
+      "credentials": {
+        "aws": {
+          "id": "your-aws-credential-id",
+          "name": "AWS Credential Name"
         }
       }
-    ],
-    "connections": {}
-  }
-  
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "url": "https://ec2.amazonaws.com",
+        "authentication": "aws",
+        "aws": {
+          "service": "ec2",
+          "region": "us-east-1"
+        },
+        "queryParametersUi": {
+          "parameter": [
+            {
+              "name": "Action",
+              "value": "StopInstances"
+            },
+            {
+              "name": "InstanceId.1",
+              "value": "i-xxxxxxxxxxxxxxxxx"
+            },
+            {
+              "name": "Version",
+              "value": "2016-11-15"
+            }
+          ]
+        }
+      },
+      "name": "Stop EC2",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [500, 300],
+      "credentials": {
+        "aws": {
+          "id": "your-aws-credential-id",
+          "name": "AWS Credential Name"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If Start",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If Start": {
+      "main": [
+        [
+          {
+            "node": "Start EC2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop EC2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false
+}
